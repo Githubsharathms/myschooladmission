@@ -6,18 +6,18 @@
 
 @section('content')
 <div class="container">
-    <h2>Signup Form</h2>
+    <h2>Sign Up</h2>
     <div id="message" class="alert" style="display: none;"></div>
 
     <form id="signup-form">
-        <!-- Mobile Step -->
+        <!-- Country Code and Mobile Number Step -->
         <div id="mobile-step">
             <div class="form-group">
-                <label for="mobile_number">Mobile Number:</label>
-                <input type="text" class="form-control" id="mobile_number" name="mobile_number" onkeypress="return isNumber(event)" required>
-                <small id="number-message" class="text-danger" style="display: none;">Only numbers allowed.</small>
+                <label for="mobile_number" class="d-block">Mobile Number:</label>
+                <input type="tel" class="form-control" id="mobile_number" name="mobile_number" required>
+                <div id="number-error" class="text-danger" style="display: none;">Invalid phone number for the selected country code.</div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="submitMobile()">Submit Mobile Number</button>
+            <button type="button" class="btn btn-primary" onclick="submitMobile()">Sign Up</button>
         </div>
 
         <!-- OTP Step -->
@@ -43,38 +43,56 @@
         <div id="name-step" class="hidden">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" onkeypress="return isAlphabetOrSpace(event)" required>
-                <small id="name-message" class="text-danger" style="display: none;">Only alphabets and spaces allowed.</small>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <button type="button" class="btn btn-primary" onclick="submitName()">Submit Name</button>
         </div>
     </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 <script>
+    $(document).ready(function() {
+        // Initialize intl-tel-input
+        var input = document.querySelector("#mobile_number");
+        var iti = window.intlTelInput(input, {
+            initialCountry: "auto",
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        // Validate phone number on input blur
+        input.addEventListener('blur', function() {
+            if (iti.isValidNumber()) {
+                $('#number-message').hide();
+            } else {
+                $('#number-message').show();
+            }
+        });
+
+        // Set initial country in mobile number input
+        input.addEventListener("countrychange", function() {
+            var selectedCountry = iti.getSelectedCountryData();
+            $('#country_code').val('+' + selectedCountry.dialCode);
+        });
+    });
+
     let otpTimer;
 
-    function isNumber(event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-            document.getElementById('number-message').style.display = 'block';
-            return false;
-        }
-        document.getElementById('number-message').style.display = 'none';
-        return true;
-    }
-
-    function isAlphabetOrSpace(event) {
-        var charCode = (event.which) ? event.which : event.keyCode;
-        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode != 32 && charCode != 0) {
-            document.getElementById('name-message').style.display = 'block';
-            return false;
-        }
-        document.getElementById('name-message').style.display = 'none';
-        return true;
-    }
-
     function submitMobile() {
+        var input = document.querySelector("#mobile_number");
+        var iti = window.intlTelInputGlobals.getInstance(input);
+
+        if (!iti.isValidNumber()) {
+            $('#message').removeClass('alert-info').addClass('alert-danger').html('Invalid phone number for the selected country code.').show();
+            return;
+        }
+
+        var fullNumber = iti.getNumber();
+
         $.ajax({
             url: "{{ route('signup.submitMobile') }}",
             method: "POST",
@@ -82,7 +100,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                mobile_number: $('#mobile_number').val(),
+                mobile_number: fullNumber,
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
@@ -90,7 +108,7 @@
                     $('#message').removeClass('alert-info').addClass('alert-danger').html(response.error).show();
                     return;
                 }
-                $('#mobile_display').val($('#mobile_number').val()); // Display entered mobile number
+                $('#mobile_display').val(fullNumber); // Display entered mobile number
                 $('#otp_display').val(response.otp); // Display generated OTP
                 $('#mobile-step').addClass('hidden');
                 $('#otp-step').removeClass('hidden');

@@ -2,7 +2,7 @@
 
 /* Body and Container */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
 }
 
@@ -12,7 +12,7 @@ body {
     background-color: #ffffff;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Elements */
@@ -28,17 +28,35 @@ label {
     font-weight: bold;
 }
 
-input[type=text] {
-    padding: 10px;
+input[type=text], input[type=tel] {
+    padding: 12px;
     font-size: 16px;
     width: 100%;
     border: 1px solid #ced4da;
     border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type=text]:focus, input[type=tel]:focus {
+    outline: 0;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .btn-primary {
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 16px;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
 
 /* Messages */
@@ -73,4 +91,14 @@ input[type=text] {
 
 .hidden {
     display: none;
+}
+
+/* Additional Customizations */
+#mobile_number {
+    width: calc(200% - 24px); /* Adjust width of mobile number input */
+}
+
+label[for="mobile_number"] {
+    display: block;
+    margin-bottom: 5px;
 }
