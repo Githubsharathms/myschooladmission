@@ -1,5 +1,3 @@
-<!-- resources/views/signup.blade.php -->
-
 @extends('layouts.app')
 
 @section('title', 'Signup Form')
@@ -27,27 +25,34 @@
                 <input type="text" class="form-control" id="mobile_display" name="mobile_display" readonly>
             </div>
             <div class="form-group">
-                <label for="otp_display">OTP:</label>
-                <input type="text" class="form-control" id="otp_display" name="otp_display" readonly>
+                <p id="otp-timer" class="mb-1"></p>
+                <span id="otp-expired-container" class="d-flex align-items-center">
+                    <span id="otp-expired-msg" class="text-danger mr-2"></span>
+                    <button type="button" class="btn btn-link hidden p-0" id="resend-otp-button" onclick="resendOTP()">Resend OTP</button>
+                </span>
             </div>
             <div class="form-group">
-                <label for="otp">Enter OTP:</label>
+                <label for="otp">OTP:</label>
                 <input type="text" class="form-control" id="otp" name="otp" required>
             </div>
-            <p id="otp-timer"></p>
-            <button type="button" class="btn btn-primary" onclick="submitOTP()">Submit OTP</button>
-            <button type="button" class="btn btn-link hidden" id="resend-otp-button" onclick="resendOTP()">Resend OTP</button>
+            <button type="button" class="btn btn-primary" id="submit-otp-button" onclick="submitOTP()">Submit OTP</button>
         </div>
 
         <!-- Name Step -->
         <div id="name-step" class="hidden">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" required oninput="validateName(this)">
+                <div id="name-error" class="text-danger" style="display: none;">Only alphabets and spaces are allowed.</div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="submitName()">Submit Name</button>
+            <button type="button" class="btn btn-primary" onclick="submitName()">Sign Up</button>
         </div>
     </form>
+
+    <!-- Login button container -->
+    <div id="login-button-container" class="text-center mt-3" style="display: none;">
+        Already have an account? <a href="{{ route('login') }}" class="btn btn-link">Login</a>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -59,7 +64,7 @@
         // Initialize intl-tel-input
         var input = document.querySelector("#mobile_number");
         var iti = window.intlTelInput(input, {
-            initialCountry: "auto",
+            initialCountry: "in", // Set default country to India
             separateDialCode: true,
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
         });
@@ -67,9 +72,9 @@
         // Validate phone number on input blur
         input.addEventListener('blur', function() {
             if (iti.isValidNumber()) {
-                $('#number-message').hide();
+                $('#number-error').hide();
             } else {
-                $('#number-message').show();
+                $('#number-error').show();
             }
         });
 
@@ -105,11 +110,17 @@
             },
             success: function(response) {
                 if (response.error) {
-                    $('#message').removeClass('alert-info').addClass('alert-danger').html(response.error).show();
+                    if (response.error === 'This number is already taken.') {
+                        alert(response.error); // Display alert popup
+                        $('#login-button-container').show(); // Display login button
+                    } else {
+                        $('#message').removeClass('alert-info').addClass('alert-danger').html(response.error).show();
+                    }
                     return;
                 }
+                // Proceed with the rest of the success logic as before
                 $('#mobile_display').val(fullNumber); // Display entered mobile number
-                $('#otp_display').val(response.otp); // Display generated OTP
+                alert('Your OTP is: ' + response.otp); // Display OTP in alert
                 $('#mobile-step').addClass('hidden');
                 $('#otp-step').removeClass('hidden');
                 $('#message').removeClass('alert-danger').addClass('alert-info').html('OTP sent').show();
@@ -140,7 +151,7 @@
 
             if (--timer < 0) {
                 clearInterval(otpTimer);
-                $('#otp-timer').text("OTP has expired. Please request a new OTP.");
+                $('#otp-timer').text("OTP has expired.");
                 $('#otp').prop('disabled', true);
                 $('#resend-otp-button').removeClass('hidden'); // Show the resend OTP button
             }
@@ -171,6 +182,7 @@
                     $('#name-step').removeClass('hidden'); // Show the name step without hiding OTP step
                     $('#message').hide();
                     clearInterval(otpTimer); // Stop the timer on successful OTP submission
+                    $('#submit-otp-button').hide(); // Hide the Submit OTP button
                 }
             },
             error: function(response) {
@@ -195,9 +207,9 @@
                     $('#message').removeClass('alert-info').addClass('alert-danger').html(response.error).show();
                     return;
                 }
-                $('#otp_display').val(response.otp); // Display new OTP
+                alert('Your OTP is: ' + response.otp); // Display new OTP in alert
                 $('#otp').val(''); // Clear the OTP input field
-                $('#otp').prop('disabled', false); // Enable the OTP input field
+                $('#otp').prop('disabled', false); // Re-enable the OTP input field
                 $('#message').removeClass('alert-danger').addClass('alert-info').html('OTP resent').show();
 
                 // Hide the resend OTP button
@@ -232,6 +244,16 @@
                 $('#message').removeClass('alert-success').addClass('alert-danger').html('Error: ' + response.responseJSON.message).show();
             }
         });
+    }
+
+    function validateName(input) {
+        var regex = /^[a-zA-Z\s]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+            $('#name-error').show();
+        } else {
+            $('#name-error').hide();
+        }
     }
 </script>
 @endsection

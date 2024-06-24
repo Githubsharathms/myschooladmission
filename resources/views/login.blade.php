@@ -4,17 +4,21 @@
 
 @section('title', 'Login Form')
 
+@section('head')
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@endsection
+
 @section('content')
 <div class="container">
     <h2>Login Form</h2>
     <div id="message" class="alert" style="display: none;"></div>
 
     <form id="login-form">
-        <!-- Mobile Step -->
+        <!-- Country Code and Mobile Number Step -->
         <div id="mobile-step">
             <div class="form-group">
-                <label for="mobile_number">Mobile Number:</label>
-                <input type="text" class="form-control" id="mobile_number" name="mobile_number" required>
+                <label for="mobile_number" class="d-block">Mobile Number:</label>
+                <input type="tel" class="form-control" id="mobile_number" name="mobile_number" required>
             </div>
             <button type="button" class="btn btn-primary" onclick="submitMobile()">Submit Mobile Number</button>
         </div>
@@ -40,10 +44,49 @@
     </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
 <script>
+    $(document).ready(function() {
+        // Initialize intl-tel-input
+        var input = document.querySelector("#mobile_number");
+        var iti = window.intlTelInput(input, {
+            initialCountry: "IN",  // Set default country to India
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+
+        // Validate phone number on input blur
+        input.addEventListener('blur', function() {
+            if (iti.isValidNumber()) {
+                $('#message').hide(); // Hide any existing error messages
+            } else {
+                $('#message').removeClass('alert-info').addClass('alert-danger').html('Invalid phone number for the selected country code.').show();
+            }
+        });
+
+        // Set initial country in mobile number input
+        input.addEventListener("countrychange", function() {
+            var selectedCountry = iti.getSelectedCountryData();
+            $('#country_code').val('+' + selectedCountry.dialCode);
+        });
+    });
+
     let otpTimer;
 
     function submitMobile() {
+        var input = document.querySelector("#mobile_number");
+        var iti = window.intlTelInputGlobals.getInstance(input);
+
+        if (!iti.isValidNumber()) {
+            $('#message').removeClass('alert-info').addClass('alert-danger').html('Invalid phone number for the selected country code.').show();
+            return;
+        }
+
+        var fullNumber = iti.getNumber();
+
         $.ajax({
             url: "{{ route('userlogin.submitMobile') }}",
             method: "POST",
@@ -51,7 +94,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                mobile_number: $('#mobile_number').val(),
+                mobile_number: fullNumber,
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
@@ -59,7 +102,7 @@
                     $('#message').removeClass('alert-info').addClass('alert-danger').html(response.error).show();
                     return;
                 }
-                $('#mobile_display').val($('#mobile_number').val()); // Display entered mobile number
+                $('#mobile_display').val(fullNumber); // Display entered mobile number
                 $('#otp_display').val(response.otp); // Display generated OTP
                 $('#mobile-step').addClass('hidden');
                 $('#otp-step').removeClass('hidden');

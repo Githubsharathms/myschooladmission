@@ -9,10 +9,18 @@
     <title>@yield('title')</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{{ asset('css/signup.css') }}" rel="stylesheet">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Conditional CSS inclusion for signup and login pages -->
+    @if(Request::is('signup') || Request::is('signup/*') || Request::is('login') || Request::is('login/*'))
+        <link href="{{ asset('css/signup.css') }}" rel="stylesheet">
+    @endif
+
+    <!-- Custom CSS -->
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+    <link href="{{ asset('css/header.css') }}" rel="stylesheet">
+
     <!-- Include additional CSS files based on the page -->
     @yield('head')
 </head>

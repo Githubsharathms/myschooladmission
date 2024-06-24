@@ -4,15 +4,26 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh;
+    margin: 0;
 }
 
 .container {
-    max-width: 600px; /* Adjust container max-width as needed */
-    margin: 50px auto;
-    background-color: #ffffff;
+    width: 500px;
+    background-color: #f8f9fa;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    text-align: left; /* Align text left */
+    margin-bottom: 250px;
+    margin-top: 120px;
+}
+
+.container h2 {
+    text-align: center; /* Center only the h2 heading */
 }
 
 /* Form Elements */
@@ -22,23 +33,56 @@ form {
 
 .form-group {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 label {
     font-weight: bold;
+    color: #495057;
+    margin-bottom: 5px; /* Add some spacing between label and input */
 }
 
-input[type=text], input[type=tel] {
-    padding: 12px;
-    font-size: 16px;
-    width: 100%;
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.intl-tel-input {
+    flex: 0 0 90px; /* Fixed width for the country code dropdown */
+}
+
+.intl-tel-input .selected-flag {
+    height: 38px;
     border: 1px solid #ced4da;
+    border-radius: 4px 0 0 4px;
+    background-color: #f8f9fa;
+    display: inline-block;
+    text-align: center;
+    line-height: 36px;
+}
+
+.intl-tel-input .selected-flag .iti-flag {
+    margin-top: 6px;
+}
+
+.intl-tel-input .flag-container {
+    height: 100%;
+    display: inline-block;
+}
+
+.form-control {
+    flex: 1; /* Take up remaining space */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    /* Remove left border to blend with the dropdown */
     border-radius: 4px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    outline: none;
 }
 
-input[type=text]:focus, input[type=tel]:focus {
-    outline: 0;
+.form-control:focus {
     border-color: #80bdff;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
@@ -52,6 +96,7 @@ input[type=text]:focus, input[type=tel]:focus {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    width: 100%;
 }
 
 .btn-primary:hover {
@@ -69,6 +114,7 @@ input[type=text]:focus, input[type=tel]:focus {
     margin-bottom: 20px;
     border-radius: 4px;
     font-size: 16px;
+    width: 100%;
 }
 
 .alert-info {
@@ -94,11 +140,47 @@ input[type=text]:focus, input[type=tel]:focus {
 }
 
 /* Additional Customizations */
-#mobile_number {
-    width: calc(200% - 24px); /* Adjust width of mobile number input */
-}
-
 label[for="mobile_number"] {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
+
+#mobile-step, #otp-step, #name-step {
+    margin-top: 20px;
+}
+
+#mobile_number {
+    width: 100%;
+}
+
+.iti__country-list {
+    width: 440px !important; /* Adjust width as needed */
+}
+
+#otp-expired-container {
+    display: flex;
+    align-items: center;
+}
+
+#otp-expired-msg {
+    margin-right: 10px; /* Adjust margin as needed for spacing */
+}
+
+#resend-otp-button {
+    margin-left: auto; /* Pushes the button to the right */
+    padding: 0;
+    border: none;
+    background: none;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: -33px;
+}
+
+
+#resend-otp-button:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+

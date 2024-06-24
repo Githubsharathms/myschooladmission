@@ -1,0 +1,81 @@
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar */
+.navbar {
+    padding: 0.5rem 1rem;
+    background-color: #ffffff; /* Header background color */
+    border-bottom: 1px solid #dee2e6; /* Header bottom border */
+}
+
+.navbar-brand img {
+    width: 360px; /* Adjust logo width */
+    height: 60px; /* Adjust logo height */
+    margin-right: 20px; /* Space between logo and other elements */
+}
+
+.border {
+    margin-left: 20px; /* Adjust to move the box slightly to the right */
+}
+
+/* City Selector and Dropdown */
+.logo-search {
+    padding: 0;
+}
+
+.city-changer {
+    cursor: pointer;
+}
+
+.city-changer svg {
+    vertical-align: middle;
+}
+
+.show_full_city {
+    display: flex;
+    align-items: center;
+}
+
+/* Navbar Toggler */
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Navbar Items */
+.navbar-nav .nav-item {
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link {
+    color: #000; /* Set text color to black */
+    font-weight: bold;
+    transition: background-color 0.3s ease; /* Only animate background color */
+    text-decoration: none; /* Remove underline from links */
+    display: inline-block;
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 20px; /* Adjust button shape */
+    background-color: var(--button-variant-secondary-state-enabled-container-background-color, #fff); /* Default background color */
+    border: 1px solid var(--button-variant-secondary-state-enabled-container-border-color, #d3d3d3); /* Default border */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #d3d3d3; /* Hover background color */
+    color: #000; /* Keep text color black on hover */
+}
+
+/* Fixed Header */
+.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030; /* Ensure the header is above other content */
+}
