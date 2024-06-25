@@ -12,8 +12,6 @@
     border-bottom: 1px solid #dee2e6; /* Header bottom border */
 }
 
-
-
 .border {
     margin-left: 20px; /* Adjust to move the box slightly to the right */
     border: none; /* Remove the border */
@@ -28,7 +26,8 @@
     cursor: pointer;
 }
 
-.city-changer .fa-map-marker-alt, .city-changer .fa-chevron-down {
+.city-changer .fa-map-marker-alt,
+.city-changer .fa-chevron-down {
     vertical-align: middle;
 }
 

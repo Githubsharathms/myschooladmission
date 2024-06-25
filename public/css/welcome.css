@@ -35,7 +35,8 @@
     cursor: pointer;
 }
 
-.city-changer .fa-map-marker-alt, .city-changer .fa-chevron-down {
+.city-changer .fa-map-marker-alt,
+.city-changer .fa-chevron-down {
     vertical-align: middle;
 }
 

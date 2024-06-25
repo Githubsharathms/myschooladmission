@@ -30,6 +30,3 @@ Route::get('/userdetails', [UserDetailsController::class, 'index'])->name('userd
 Route::post('/userdetails/store', [UserDetailsController::class, 'store'])->name('userdetails.store');
 Route::post('/userdetails/update/{id}', [UserDetailsController::class, 'update'])->name('userdetails.update');
 Route::post('/userdetails/delete/{id}', [UserDetailsController::class, 'destroy'])->name('userdetails.delete');
-
-
-

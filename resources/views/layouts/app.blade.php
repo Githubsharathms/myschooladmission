@@ -16,7 +16,7 @@
 
     <!-- Conditional CSS inclusion for signup and login pages -->
     @if(Request::is('signup') || Request::is('signup/*') || Request::is('login') || Request::is('login/*'))
-        <link href="{{ asset('css/signup.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/signup.css') }}" rel="stylesheet">
     @endif
 
     <!-- Custom CSS -->
