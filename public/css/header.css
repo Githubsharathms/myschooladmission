@@ -12,14 +12,11 @@
     border-bottom: 1px solid #dee2e6; /* Header bottom border */
 }
 
-.navbar-brand img {
-    width: 360px; /* Adjust logo width */
-    height: 60px; /* Adjust logo height */
-    margin-right: 20px; /* Space between logo and other elements */
-}
+
 
 .border {
     margin-left: 20px; /* Adjust to move the box slightly to the right */
+    border: none; /* Remove the border */
 }
 
 /* City Selector and Dropdown */
@@ -31,13 +28,24 @@
     cursor: pointer;
 }
 
-.city-changer svg {
+.city-changer .fa-map-marker-alt, .city-changer .fa-chevron-down {
     vertical-align: middle;
 }
 
 .show_full_city {
     display: flex;
     align-items: center;
+    color: #000; /* Text color */
+    font-weight: bold; /* Font weight */
+    padding: 8px 12px; /* Padding */
+    border-radius: 20px; /* Rounded border */
+    border: 1px solid #d3d3d3; /* Border */
+    transition: background-color 0.3s ease; /* Transition effect */
+}
+
+.show_full_city:hover {
+    background-color: #d3d3d3; /* Hover background color */
+    color: #000; /* Hover text color */
 }
 
 /* Navbar Toggler */
@@ -63,8 +71,8 @@
     display: inline-block;
     padding: 10px 20px; /* Adjust padding as needed */
     border-radius: 20px; /* Adjust button shape */
-    background-color: var(--button-variant-secondary-state-enabled-container-background-color, #fff); /* Default background color */
-    border: 1px solid var(--button-variant-secondary-state-enabled-container-border-color, #d3d3d3); /* Default border */
+    background-color: #fff; /* Default background color */
+    border: 1px solid #d3d3d3; /* Default border */
 }
 
 .navbar-nav .nav-link:hover {
@@ -72,10 +80,17 @@
     color: #000; /* Keep text color black on hover */
 }
 
-/* Fixed Header */
-.fixed-top {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1030; /* Ensure the header is above other content */
+.sticky-top {
+    position: fixed; /* Set the position to fixed */
+    top: 0; /* Position at the top of the viewport */
+    width: 100%; /* Take up full width of the viewport */
+    z-index: 1030; /* Ensure it's above other content */
+    background-color: #ffffff; /* Background color of the header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
+}
+
+nav.navbar .navbar-brand img {
+    width: 360px; /* Adjust logo width */
+    height: 60px; /* Adjust logo height */
+    margin-right: 20px; /* Space between logo and other elements */
 }
